@@ -119,6 +119,20 @@ function shuffleSorter(lines: string[]): string[] {
     return lines;
 }
 
+function timestampCompare(a: string, b: string): number {
+  var ta = a.indexOf('<');
+  var tb = b.indexOf('<');
+  if (ta < 0 || tb < 0)
+    return 0;
+  
+  var sa = a.substring(ta, ta+30);
+  var sb = b.substring(tb, tb+30);
+  if (sa === sb) {
+    return 0;
+  }
+  return sa < sb ? -1 : 1;
+}
+
 const transformerSequences = {
   sortNormal: [makeSorter()],
   sortUnique: [makeSorter(), removeDuplicates],
@@ -131,7 +145,8 @@ const transformerSequences = {
   sortVariableLengthReverse: [makeSorter(variableLengthReverseCompare)],
   sortNatural: [makeSorter(naturalCompare)],
   sortShuffle: [shuffleSorter],
-  removeDuplicateLines: [removeDuplicates]
+  removeDuplicateLines: [removeDuplicates],
+  timestamp: [makeSorter(timestampCompare)]
 };
 
 export const sortNormal = () => sortActiveSelection(transformerSequences.sortNormal);
@@ -146,3 +161,4 @@ export const sortVariableLengthReverse = () => sortActiveSelection(transformerSe
 export const sortNatural = () => sortActiveSelection(transformerSequences.sortNatural);
 export const sortShuffle = () => sortActiveSelection(transformerSequences.sortShuffle);
 export const removeDuplicateLines = () => sortActiveSelection(transformerSequences.removeDuplicateLines);
+export const timestamp = () => sortActiveSelection(transformerSequences.timestamp);
