@@ -12,6 +12,7 @@ function makeSorter(algorithm?: SortingAlgorithm): ArrayTransformer {
 function sortActiveSelection(transformers: ArrayTransformer[]): Thenable<boolean> | undefined {
   const textEditor = vscode.window.activeTextEditor;
   if (!textEditor) {
+    vscode.window.showErrorMessage('Probably source file is too big.\nTry with smaller file.');
     return undefined;
   }
   const selection = textEditor.selection;
@@ -21,6 +22,7 @@ function sortActiveSelection(transformers: ArrayTransformer[]): Thenable<boolean
   }
 
   if (selection.isSingleLine) {
+    vscode.window.showErrorMessage('Will not work with single line!');
     return undefined;
   }
   return sortLines(textEditor, selection.start.line, selection.end.line, transformers);
